@@ -1,10 +1,7 @@
-import java.io.File
-import java.io.InputStream
-
 fun main(args: Array<String>) {
 
     // read from file and create map holding the data
-    val input = readInputFromFile()
+    val input = readInputFromFile("day7input.txt")
     val map = splitInMap(input)
 
     /**
@@ -83,12 +80,6 @@ fun main(args: Array<String>) {
 
     dfs(root.first)
     findUnbalancedPath(root.first)
-}
-
-
-fun readInputFromFile(): String {
-    val inputStream: InputStream = File("src/inputs/day7input.txt").inputStream()
-    return inputStream.bufferedReader().use { it.readText() }
 }
 
 fun splitInMap(input: String): MutableMap<Pair<String, Int>, List<String>> {
