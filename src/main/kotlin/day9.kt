@@ -4,7 +4,7 @@ fun main(args: Array<String>) {
 
     chars = chars.subList(1, chars.size - 1)
 
-    var opens = mutableListOf<Int>()
+    val opens = mutableListOf<Int>()
     var canceledGarbage = 0
 
     fun findResult() {
