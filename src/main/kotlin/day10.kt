@@ -52,12 +52,15 @@ fun main(args: Array<String>) {
     }
 
     weights.forEach {
-        println(seq)
         val endIndex = if (currIndex + it > seqEnd) seqEnd - it else currIndex + it - 1
-        reverseSublist(currIndex, endIndex)
+        if (it > 1) {
+            reverseSublist(currIndex, endIndex)
+        }
+        println("Weight $it From $currIndex to $endIndex, skip is $skipSize ||| $seq")
         currIndex = (currIndex + it + skipSize) % seqEnd
         skipSize++
     }
-    println(seq)
+    println("From $currIndex, skip is $skipSize ||| $seq")
+    println(seq[0] * seq[1])
 
 }
