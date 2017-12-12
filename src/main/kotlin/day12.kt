@@ -3,10 +3,9 @@ fun main(args: Array<String>) {
     val pipes = readInputFromFile("day12input.txt").split("\n")
 
     val hugeDic = mutableMapOf<Int, List<Int>>()
-
-    val target = 0
-    var targetGroup = mutableListOf<Int>()
+    val targetGroup = mutableListOf<MutableList<Int>>()
     val visited = mutableListOf<Int>()
+    val temp = mutableListOf<Int>()
 
     pipes.forEach {
         val keyValue = it.split(" <-> ")
@@ -15,14 +14,16 @@ fun main(args: Array<String>) {
         hugeDic.put(key, value)
     }
 
+    /**
+     * PART ONE
+     */
     fun dfs(currNode: Int) {
         if (visited.containsAll(hugeDic[currNode]!!)) {
-            targetGroup = targetGroup.distinct().toMutableList()
             return
         }
 
-        targetGroup.add(currNode)
-        targetGroup.addAll(hugeDic[currNode]!!)
+        temp.add(currNode)
+        temp.addAll(hugeDic[currNode]!!)
         visited.add(currNode)
 
         hugeDic[currNode]!!.forEach {
@@ -32,7 +33,17 @@ fun main(args: Array<String>) {
         }
     }
 
-    dfs(target)
+    hugeDic.keys.forEach {
+        dfs(it)
+        targetGroup.add(temp.distinct().sorted().toMutableList())
+        temp.clear()
+        visited.clear()
+    }
 
-    println("There are ${targetGroup.count()} elements connected to $target")
+    println("There are ${targetGroup[0].count()} elements connected to 0")
+
+    /**
+     * PART TWO
+     */
+    println(targetGroup.distinct().count())
 }
