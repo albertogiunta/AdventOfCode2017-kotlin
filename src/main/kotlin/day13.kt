@@ -10,32 +10,45 @@ fun main(args: Array<String>) {
     input.forEach {
         val layer = it.split(": ")
         layers.put(layer[0].toInt(), layer[1].toInt())
-        positions.put(layer[0].toInt(), 0)
-        directions.put(layer[0].toInt(), true)
     }
 
-    /**
-     * PART ONE
-     */
-    for (packetPosition in 0..layers.keys.max()!!) {
+    var delay = -1
+    var packetPosition: Int
 
-        if (layers.containsKey(packetPosition) && positions[packetPosition]!! == 0) remember.put(packetPosition, layers[packetPosition]!!)
-
-        for (layer in layers.keys) {
-            val direction =
-                    when {
-                        positions[layer]!! == 0 -> true
-                        positions[layer]!! == layers[layer]!! - 1 -> false
-                        else -> directions[layer]!!
-                    }
-            directions.put(layer, direction)
-            val step = if (directions[layer]!!) 1 else -1
-            positions.put(layer, positions[layer]!! + step)
+    do {
+        delay++
+        remember.clear()
+        packetPosition = -1
+        layers.forEach {
+            positions.put(it.key, 0)
+            directions.put(it.key, true)
         }
-    }
 
-    var sum = 0
-    remember.forEach { t, u -> sum += t * u }
-    println(sum)
+        for (pico in 0..layers.keys.max()!! + delay) {
+
+            if (pico >= delay) packetPosition++
+
+            // check if i've been catched
+            if (packetPosition >= 0 && layers.containsKey(packetPosition) && positions[packetPosition]!! == 0) remember.put(packetPosition, layers[packetPosition]!!)
+
+            for (layer in layers.keys) {
+                val direction =
+                        when {
+                            positions[layer]!! == 0 -> true
+                            positions[layer]!! == layers[layer]!! - 1 -> false
+                            else -> directions[layer]!!
+                        }
+                directions.put(layer, direction)
+                val step = if (directions[layer]!!) 1 else -1
+                positions.put(layer, positions[layer]!! + step)
+            }
+        }
+
+        var severity = 0
+        remember.forEach { t, u -> severity += t * u }
+        if (delay == 0) println("PART ONE: severity $severity")
+    } while (remember.isNotEmpty())
+
+    println("PART TWO: delay $delay")
 
 }
