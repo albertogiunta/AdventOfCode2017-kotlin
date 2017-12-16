@@ -4,14 +4,15 @@ import kotlin.streams.toList
 fun main(args: Array<String>) {
 
     val weights = listOf(106, 16, 254, 226, 55, 2, 1, 166, 177, 247, 93, 0, 255, 228, 60, 36)
-//    val weights = listOf(3, 4, 1, 5)
     var seq = IntStream.range(0, 256).toList()
+//    val weights = listOf(3, 4, 1, 5)
 //    var seq = IntStream.range(0, 5).toList()
     val seqStart = 0
     val seqEnd = seq.size
     var currIndex = 0
     var skipSize = 0
 //    0 3 2 1 4
+    println("Weight ${weights[0]} From $currIndex\t\t, skip is $skipSize ||| $seq")
 
     fun reverseSublist(startIndex: Int, endIndex: Int) {
         if (startIndex > endIndex) {
@@ -52,13 +53,15 @@ fun main(args: Array<String>) {
     }
 
     weights.forEach {
-        val endIndex = if (currIndex + it > seqEnd) seqEnd - it else currIndex + it - 1
-        if (it > 1) {
-            reverseSublist(currIndex, endIndex)
+        if (it <= seq.size) {
+            val endIndex = if (currIndex + it > seqEnd) seqEnd - it else currIndex + it - 1
+            if (it > 1) {
+                reverseSublist(currIndex, endIndex)
+            }
+            println("Weight $it From $currIndex to $endIndex, skip is $skipSize ||| $seq")
+            currIndex = (currIndex + it + skipSize) % seqEnd
+            skipSize++
         }
-        println("Weight $it From $currIndex to $endIndex, skip is $skipSize ||| $seq")
-        currIndex = (currIndex + it + skipSize) % seqEnd
-        skipSize++
     }
     println("From $currIndex, skip is $skipSize ||| $seq")
     println(seq[0] * seq[1])
